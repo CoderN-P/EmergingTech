@@ -20,7 +20,7 @@
     }
 </script>
 
-<div class="max-w-[800px] mx-auto w-full">
+<div class="max-w-[800px] mx-auto w-full p-4">
     <h1 class="text-3xl font-semibold tracking-tight mb-4">Leaderboard</h1>
     <div class="flex flex-col gap-6 mb-8">
         {#each users as user, index}
