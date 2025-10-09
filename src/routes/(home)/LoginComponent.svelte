@@ -12,7 +12,7 @@
             options: {
                 redirectTo,
                 queryParams: {
-                    hd: 'mittymonarch.com'
+                     hd: 'mittymonarch.com'
                 }
             },
            

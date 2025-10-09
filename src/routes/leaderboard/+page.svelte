@@ -29,7 +29,7 @@
                     <p class="text-xl font-light text-neutral-500">{String(index+1).padStart(2, '0')}</p>
                     <img src={user.profile_picture} alt="Avatar" class="w-6 h-6 rounded-full object-cover"/>
                     
-                    <p class="text-xl text-black dark:text-neutral-300 font-light">{user.name}</p>
+                    <p class="text-xl text-black dark:text-neutral-300 font-light">{user.name} '{user.email.split("@")[0].slice(user.email.split("@")[0].length - 2, user.email.split("@")[0].length) }</p>
                 </div>
                 <p class="text-lg font-medium text-emerald-400 ">{user.points} pts</p>
             </div>

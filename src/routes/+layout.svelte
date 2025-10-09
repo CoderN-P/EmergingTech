@@ -14,20 +14,22 @@
 	let { children } = $props();
     
     const logout = async () => {
+        console.log("Logging out...");
         await supabase.auth.signOut();
         $user = null;
-        await goto("/");
+        loading = false;
+        
+        if (!["/", "/leaderboard", "/attend"].includes(page.url.pathname)) {
+            await goto("/");
+        }
     }
 
 	onMount(async () => {
     
 		const { data, error } = await supabase.auth.getSession();
-        
+        console.log("Auth session data:", data);
         if (error || !data?.session) {
-            $user = null;
-            loading = false;
-            await supabase.auth.signOut();
-            return;
+            return await logout();
         }
         
         const supabaseAuthUser = data.session.user;
@@ -37,7 +39,7 @@
         }
         
         if ($user){
-            if (page.url.pathname === "/dashboard/" && !$user.officer) {
+            if (page.url.pathname === "/dashboard" && !$user.officer) {
                 await goto("/");
             }
             loading = false;

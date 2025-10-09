@@ -6,7 +6,7 @@ export async function getLeaderboard(page: number){
 
     const { data, error } = await supabase
         .from('Users')
-        .select('id, name, points, profile_picture')
+        .select('id, name, points, profile_picture, email')
         .order('points', { ascending: false })
         .range((page - 1) * pageSize, page * pageSize - 1);
     
