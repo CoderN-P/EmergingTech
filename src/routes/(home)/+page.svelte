@@ -6,6 +6,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { attendMeeting } from '$lib/attendMeeting';
 	import * as Card from '$lib/components/ui/card';
+	import OfficerBadge from '$lib/components/OfficerBadge.svelte';
 
 	let meetingText = $state('');
 	let loading = $state(false);
@@ -37,6 +38,7 @@
 	<div class="mx-auto w-full max-w-[800px] p-4">
 		<h1 class="mb-4 text-3xl font-medium text-neutral-100">
 			Welcome, <span class="text-emerald-400">{$user.name}</span>!
+			<OfficerBadge officer={$user.officer} />
 		</h1>
 
 		<Input
@@ -61,7 +63,7 @@
 							<p class="text-sm text-neutral-500">Your current balance and lifetime total.</p>
 						</div>
 						<div
-							class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400"
+							class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-0.5 pt-1 text-xs font-medium text-emerald-400"
 						>
 							{nextMilestone - $user.points} to next milestone
 						</div>

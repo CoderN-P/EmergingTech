@@ -84,7 +84,7 @@
             }
         }
         
-        if (page.url.pathname === "/dashboard/" && !$user.officer) {
+        if (page.url.pathname.includes("/dashboard") && !$user.officer) {
             await goto("/");
         }
         loading = false;
