@@ -1,4 +1,4 @@
-<script>
+<script language="ts">
 	import { onMount } from 'svelte'
     import { supabase } from '$lib/supabaseClient'
     import { user } from '$lib/stores'
@@ -12,6 +12,12 @@
     
     let loading = $state(true);
 	let { children } = $props();
+
+    const isPublicRoute = (pathname) =>
+        pathname === "/" ||
+        pathname === "/leaderboard" ||
+        pathname === "/attend" ||
+        pathname.startsWith("/profile/");
     
     const logout = async () => {
         console.log("Logging out...");
@@ -29,6 +35,11 @@
 		const { data, error } = await supabase.auth.getSession();
         console.log("Auth session data:", data);
         if (error || !data?.session) {
+            if (isPublicRoute(page.url.pathname)) {
+                loading = false;
+                return;
+            }
+
             return await logout();
         }
         

@@ -1,45 +1,59 @@
 <script lang="ts">
-    import {supabase} from "$lib/supabaseClient";
-    import { user } from "$lib/stores";
-    import { userSchema, type User } from "$lib/types/index.js";
-    import { Button } from "$lib/components/ui/button";
+	import { supabase } from '$lib/supabaseClient';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
 
-    const { redirectTo } = $props();
-    
-    async function signInWithGoogle() {
-       const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo,
-                queryParams: {
-                     hd: 'mittymonarch.com'
-                }
-            },
-           
-        })
-        
-        if (error) {
-            console.error('Error during sign-in:', error.message);
-            return;
-        }
-    }
+	const { redirectTo } = $props();
+
+	let loading = $state(false);
+	let error = $state<string | null>(null);
+
+	async function signInWithGoogle() {
+		loading = true;
+		error = null;
+
+		const { error: authError } = await supabase.auth.signInWithOAuth({
+			provider: 'google',
+			options: {
+				redirectTo,
+				queryParams: {
+					hd: 'mittymonarch.com'
+				}
+			}
+		});
+
+		if (authError) {
+			error = 'Failed to sign in. Please try again.';
+			loading = false;
+			console.error('Sign-in error:', authError.message);
+			return;
+		}
+	}
 </script>
 
-<h1 class="text-3xl font-semibold tracking-tight mb-4">You are signed out...</h1>
+<Card.Card class="w-full max-w-md border border-neutral-800 bg-neutral-950 shadow-sm">
+	<Card.Content class="p-6">
+		<div class="space-y-6">
+			<div class="space-y-2">
+				<p class="text-sm tracking-[0.2em] text-neutral-500 uppercase">Emerging Tech</p>
+				<h1 class="text-3xl font-semibold tracking-tight text-neutral-100">Sign in</h1>
+				<p class="text-sm text-neutral-400">Use your Mitty Monarch Google account to continue.</p>
+			</div>
 
-<Button onclick={signInWithGoogle}>Sign in with Google</Button>
+			{#if error}
+				<div class="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
+					{error}
+				</div>
+			{/if}
 
-<p class="mt-8 text-lg max-w-xl text-center">
-    Sign up to track your points, earn rewards, and compete with other members!
-</p>
-
-<div class="grid grid-cols-2 mt-6 gap-4 font-display">
-    <div class="p-4 border rounded-lg shadow">
-        <h2 class="text-2xl font-semibold mb-2">Club Activities</h2>
-        <p>Join us for exciting workshops, hackathons, and tech talks that keep you at the forefront of emerging technologies.</p>
-    </div>
-    <div class="p-4 border rounded-lg shadow">
-        <h2 class="text-2xl font-semibold mb-2">Networking Opportunities</h2>
-        <p>Connect with industry professionals, alumni, and fellow tech enthusiasts to build your network and open doors to new opportunities.</p>
-    </div>
-</div>
+			<Button
+				{loading}
+				onclick={signInWithGoogle}
+				disabled={loading}
+				class="h-11 w-full bg-emerald-500 text-neutral-950 hover:bg-emerald-400"
+			>
+				{loading ? 'Redirecting...' : 'Sign in with Google'}
+			</Button>
+		</div>
+	</Card.Content>
+</Card.Card>
